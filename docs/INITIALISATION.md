@@ -121,6 +121,28 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student 
         fields = ('pk', 'name', 'email', 'document', 'phone', 'registrationDate')
 ```
+_______
+
+do a serializers.py
+
++ 
+create a api.py
+```
+from leads.models import Lead
+from rest_framework import viewsets, permissions
+from .serializers import LeadSerializer
+
+
+# Lead viewset : CRUD -> (POST, GET, PUT, DELETE)
+class LeadViewset(viewsets.ModelViewSet):
+    query = Lead.object.all()
+    permission_class = [
+        permissions.AllowAny
+    ]
+    serializer_class = LeadSerializer
+
+```
+
 
 7. urls.py
 
@@ -137,6 +159,25 @@ urlpatterns = [
     re_path(r'^api/students/$', views.students_list),  # POST  GET
     re_path(r'^api/students/(?P<pk>[0-9]+)$',views.students_detail),  # PUT DELETE]
 ```
+
+
+___________
+
+```
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    # path('admin/', admin.site.urls),
+    path('', include('leads.urls')),
+]
+
+```
+ other urls
+```
+
+```
+
 
 8. views.js
 
