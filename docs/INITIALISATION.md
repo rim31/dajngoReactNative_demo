@@ -11,10 +11,13 @@ source my_env/bin/activate
 
 2. start django project
 ```
+pip install django djangorestframework django-rest-knox
+OR 
 pip install django djangorestframework django-cors-headers
 pip install --upgrade pip
-django-admin startproject django_react_proj .
-
+django-admin startproject leadmanager
+cd leadmanager 
+django-admin startproject leads 
 ```
 it will create the project django
 
@@ -45,6 +48,15 @@ add this
 CORS_ORIGIN_ALLOW_ALL = True
 ```
 
+
+_________________
+
+```
+    'leads',
+    'rest_framework',
+```
+
+
 4. create the app
 
 ```
@@ -54,7 +66,12 @@ cd django_react_proj
 
 python manage.py startapp students
 ```
+_________________
 
+```
+python manage.py makemigrations
+python manage.py migrate
+```
 
 5. migration
 
@@ -187,3 +204,4 @@ npm install bootstrap reactstrap axios --save
 OR
 yarn add bootstrap reactstrap axios --save
 ```
+
