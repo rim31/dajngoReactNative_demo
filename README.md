@@ -140,3 +140,59 @@ otherwise : "detail":"Unsupported media type \"text/plain\" in request."
 ### DELETE
 
 > http://localhost:8000/api/leads/2/
+
+
+
+# frontend
+
+[video](https://www.youtube.com/watch?v=GieYIzvdt2U)
+
+in /leadmanager
+````
+python mananage.py startapp frontend
+````
+
+create folders :
+- src/components
+- static/frontend
+- templates/frontend
+
+## create react app
+
+```
+cd leadmanager
+npx create-react-app frontend
+
+yarn start
+```
+
+
+1. create Layout
+create
+src/components/Layout/Header.js
+```
+import React from 'react'
+
+export default function Header() {
+  return (
+    <nav className="navbar navbar-expand-sm navbar-light bg-light">
+      <a className="navbar-brand" href="#">Navbar</a>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav">
+          <li className="nav-item active">
+            <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  )
+}
+```
+
+
+import it in App.js
+```
+```
