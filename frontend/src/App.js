@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Layout from './layouts/Layout';
 import Login from './components/Login';
+import Thing from './components/Thing';
 // import BaseRouter from './routes';
 // import { BrowserRouter as Router } from 'react-router-dom';
 function App() {
@@ -16,6 +17,7 @@ function App() {
     <div>
       <Layout />
       <Login userLogin={userLogin} />
+      <Thing token={token} />
     </div>
   );
 }

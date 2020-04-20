@@ -559,3 +559,7 @@ class ThingSerializer(serializers.ModelSerializer):
 
 TEST :
 > http://localhost:8000/api/things/
+
+add some datat thing
+
+now frontend again

@@ -22,20 +22,6 @@ export default function Login() {
   function toogleView() {
     setView(!isLoginView)
   }
-  // const login = (e) => {
-  //   // alert('Login');
-  //   console.log("Login ", username, password);
-  //   fetch('http://127.0.0.1:8000/auth/', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ username: username, password: password })
-  //   }).then(data => data.json())
-  //     .then(
-  //       data => { console.log(data); }
-  //     ).catch(error => console.error(error))
-  // }
-
-
 
   function login() {
     console.log(username, password)
