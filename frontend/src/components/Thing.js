@@ -1,28 +1,27 @@
 import React, { useState } from 'react'
 
-export default function Thing(props) {
+export default function Thing({ token }) {
   const [things, setThings] = useState([])
 
   const loadThings = () => {
-    console.log("get DATA ");
+    console.log("get DATA ", token);
+    alert(token);
     fetch('http://127.0.0.1:8000/api/things/', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify({ username: 'test', password: 'test' })
-    }).then(data => data.json())
-      .then(
-        data => {
-          console.log(data);
-          setThings(data);
-        }
-      ).catch(error => console.error(error))
+      headers: {
+        'Authorization': `Token 431b81eec19e04b2d774b5319ac9ca31b05debfb`
+      }
+    }).then(resp => resp.json())
+      .then(res => setThings(res))
+      .catch(error => console.error(error))
   }
 
 
   return (
     <div>
       <h1>Task</h1>
-      <table>
+      {token}
+      <table className="table">
         {things.map((thing, i) => {
           return (
             <tbody key={i} >

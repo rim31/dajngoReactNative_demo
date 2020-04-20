@@ -7,9 +7,10 @@ import Thing from './components/Thing';
 // import { BrowserRouter as Router } from 'react-router-dom';
 function App() {
 
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState([]);
 
   const userLogin = (tok) => {
+    console.log("Login", tok)
     setToken(tok);
   }
 
@@ -17,6 +18,7 @@ function App() {
     <div>
       <Layout />
       <Login userLogin={userLogin} />
+      {token}
       <Thing token={token} />
     </div>
   );

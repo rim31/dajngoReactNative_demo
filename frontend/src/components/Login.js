@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useCookies } from 'react-cookie';
 
 
-export default function Login() {
+export default function Login(props) {
   const [isLoginView, setView] = useState(true);// pour switcher entre boutton login ou register
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -38,7 +38,8 @@ export default function Login() {
           console.log(cookies)
           // have to check the number of atempts
           if (res.token) {
-            window.location.href = "https://parisrollerdance.fr"
+            console.log('token ok : ', res.token)
+            // window.location.href = "/things"
           }
         })
         .catch(error => console.log(error));
@@ -76,7 +77,7 @@ export default function Login() {
       >{isLoginView ? 'Login' : 'Register'}</button>
         <span onClick={toogleView}>Register</span></div>
       <div>
-        <a href="www.google.com">forget login/password</a>
+        <a href="/">forget login/password</a>
       </div>
     </div>
   )
