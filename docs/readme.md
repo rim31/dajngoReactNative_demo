@@ -350,3 +350,212 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 ```
+
+
+POST works :
+CORS OK
+
+## Add new data : models:
+
+models.py
+```
+from django.db import models
+from datetime import datetime
+from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+
+class Thing(models.Model):
+    # Todo list initially :
+    title = models.CharField(max_length=50)
+    description = models.TextField(max_length=255)
+    creator = models.TextField(max_length=255, blank=True)
+    people = models.TextField(max_length=255, blank=True)
+    resources = models.TextField(max_length=255, blank=True)
+    category = models.CharField(max_length=50, blank=True)
+    location = models.TextField(max_length=255, blank=True)
+    date_creation = models.DateTimeField(auto_now=True)
+    date_modification = models.DateTimeField(default=datetime.now, blank=True)
+    available_date = models.DateTimeField(default=datetime.now, blank=True)
+    limit_available = models.DateTimeField(default=datetime.now, blank=True)
+    activate = models.BooleanField(default=True)
+
+    # check the number of ratings, then add it in serializers.py
+    def nb_of_progress(self):
+        # return the number of progress vote(initially for rating number votes)
+        progress = Progress.objects.filter(thing=self)
+        return len(progress)
+
+    # average progress
+    def average_progress(self):
+        # return the average of progress vote(initially for average of  votes)
+        sum = 0
+        progress = Progress.objects.filter(thing=self)
+        for progres in progress:
+            sum += progres.state
+        if (len(progress) > 0):
+            return (sum / len(progress))
+        else:
+            return 0
+
+
+# progression of a thing 1-5 : created / received / preparing / done / received
+class Progress(models.Model):
+    thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    state = models.IntegerField(
+        validators=[MinValueValidator(1),
+                    MaxValueValidator(5)], default=1)
+
+    class Meta:
+        # only one thing per user and one state per thing/user
+        unique_together = (('user', 'thing'), )
+        index_together = (('user', 'thing'), )
+
+
+# Resource : table, tools, etc.. : created / received / preparing / done / received
+class Resource(models.Model):
+
+    thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.TextField(max_length=255)
+    category = models.CharField(max_length=50, blank=True)
+    location = models.TextField(max_length=255, blank=True)
+    available = models.TextField(max_length=255, blank=True)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+    date_creation = models.DateTimeField(auto_now=True)
+    state = models.IntegerField(
+        validators=[MinValueValidator(1),
+                    MaxValueValidator(5)], default=1)
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=50)
+    content = models.TextField()
+    description = models.TextField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.title
+
+```
+
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+
+serializers.py
+```
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+from .models import Thing, Progress
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password', 'email')
+        # to mask password to not display it
+        extra_kwargs = {'password': {'write_only': True, 'required': True}}
+
+    # fonction pour overide la creation d'un user
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
+        return user
+
+
+class ThingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+```
+
+
+admin.py
+```
+from django.contrib import admin
+from .models import Thing
+
+# Register your models here.
+admin.site.register(Thing)
+
+```
+
+
+modify urls.py
+```
+# from django.contrib import admin
+from django.urls import path
+from rest_framework import routers
+from django.conf.urls import include
+from .views import UserViewSet, ThingViewSet
+
+router = routers.DefaultRouter()
+router.register('users', UserViewSet)
+router.register('things', ThingViewSet)
+
+urlpatterns = [
+    # path('new/', admin.site.urls),# simple original url
+    path('', include(router.urls)),
+]
+```
+
+
+views.py
+```
+from rest_framework import viewsets
+from django.contrib.auth.models import User
+from .serializers import UserSerializer, ThingSerializer
+from .models import Thing
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class ThingViewSet(viewsets.ModelViewSet):
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+
+```
+
+
+serilalizers.py
+```
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+from .models import Thing, Progress
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password', 'email')
+        # to mask password to not display it
+        extra_kwargs = {'password': {'write_only': True, 'required': True}}
+
+    # function pour overide la creation d'un user
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
+        return user
+
+
+class ThingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Thing
+        fields = ['id', 'title', 'description', 'creator', 'people', 'resources', 'category', 'location',
+                  'date_creation', 'date_modification', 'available_date', 'limit_available', 'activate', ]
+
+```
+
+
+TEST :
+> http://localhost:8000/api/things/
