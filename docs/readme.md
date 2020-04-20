@@ -111,3 +111,37 @@ class UserSerializer(serializers.ModelSerializer):
         'token', 
         'validated')
 ```
+
+2. 3. urls.py
+
+api/urls.py
+
+```
+from django.urls import path
+from rest_framework import routers
+from django.conf.urls import include
+from .views import UserViewSet
+
+router = routers.DefaultRouter()
+router.register('users', UserViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+
+```
+
+backendAPI/urls.py
+```
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import include
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api', include('api.urls')),
+]
+```
+
+2. 4. Verification POSTMAN
