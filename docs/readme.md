@@ -238,3 +238,115 @@ username
 password
 
 
+
+
+___________
+
+# React js
+
+```
+npx create-react-app frontend
+```
+
+
+create differents folders and files
+
+in src/
+
+App.js
+```
+import React from 'react';
+import './App.css';
+import Layout from './layouts/Layout';
+import Login from './components/Login';
+function App() {
+  return (
+    <div>
+      <Layout />
+      <Login />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+
+components/Login.js
+```
+import React, { useState } from 'react'
+
+export default function Login() {
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  function changeUsername(e) {
+    setUsername(e.target.value);
+    console.log(username)
+  }
+
+  function changePassword(e) {
+    setPassword(e.target.value);
+    console.log(password)
+  }
+  const login = (e) => {
+    // alert('Login');
+    console.log("Login ", username, password);
+    fetch('http://127.0.0.1:8000/auth/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username, password: password })
+    }).then(
+      data => { console.log(data); }
+    ).catch(error => console.error(error))
+  }
+
+  return (
+    <div className="field">
+      LOGIN
+      <div className="control">
+        <label>Username
+        <input type="text" className="input is-info"
+            name="username" value={username} onChange={changeUsername} />
+        </label>
+      </div>
+      <div className="control">
+        <label>password
+        <input type="password" className="input is-info"
+            name="password" value={password} onChange={changePassword} />
+        </label>
+      </div>
+      <button onClick={login} className="button is-link">Login</button>
+    </div>
+  )
+}
+
+```
+
+problem CORS
+
+## CORS 
+
+modify settings.py
+
+```
+MIDDLEWARE: [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',#==========HERE
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+]
+
+```
