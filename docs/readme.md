@@ -145,3 +145,96 @@ urlpatterns = [
 ```
 
 2. 4. Verification POSTMAN
+add more validation / login / creation
+
+
+serializers.py
+```
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+# from .models import Movie, Rating
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password', 'email')
+        # to mask password to not display it
+        extra_kwargs = {'password': {'write_only': True, 'required': True}}
+
+    # fonction pour overide la creation d'un user
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
+        return user
+
+```
+
+
+api/urls.py
+```
+# from django.contrib import admin
+from django.urls import path
+from rest_framework import routers
+from django.conf.urls import include
+from .views import  UserViewSet
+
+router = routers.DefaultRouter()
+router.register('users', UserViewSet)
+
+urlpatterns = [
+    # path('new/', admin.site.urls),# simple original url
+    path('', include(router.urls)),
+]
+```
+
+
+backendAPI/urls.py
+```
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import include
+from rest_framework.authtoken.views import obtain_auth_token
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
+    path('auth/', obtain_auth_token),
+]
+```
+
+
+settings .py
+```
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+    'api'
+]
+```
+
+
+
+check authentication :
+http://127.0.0.1:8000/admin/authtoken/token/
+
+POST
+http://127.0.0.1:8000/api/users/
+ 
+
+GET a token : POST 
+http://127.0.0.1:8000/auth/
+
+post
+username
+password
+
+
