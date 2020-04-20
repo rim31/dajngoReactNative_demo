@@ -7,6 +7,7 @@ demo : django 3, react, react native, sql, heroku, firebase
 python -m venv my_env
 source my_env/bin/activate
 pip install django djangorestframework django-rest-knox
+django-admin
 ```
 1. Creation 
 

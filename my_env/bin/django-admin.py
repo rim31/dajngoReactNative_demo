@@ -1,4 +1,4 @@
-#!/Users/rims/Documents/djangorReactNative_demo/my_env/bin/python3
+#!/Users/rims/Documents/djangoReactNative_demo/my_env/bin/python3
 from django.core import management
 
 if __name__ == "__main__":
