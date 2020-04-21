@@ -67,7 +67,7 @@ export default function FormThing(props, { token, data }) {// pass here props da
       <input type="text" name="title" className="input is-info"
         placeholder={title} value={title} onChange={changeTitle}></input>
       <div>Description</div>
-      <div><textarea name="description" className="input is-info"
+      <div><textarea name="description" className="textarea is-info"
         placeholder={description} value={description} onChange={changeDescription} /></div>
       {/* <button className="button is-primary" onClick={updateClick}>Update</button> */}
       <button className="button is-info" onClick={saveClick}>Save</button>
