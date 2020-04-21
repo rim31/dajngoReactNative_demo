@@ -34,12 +34,13 @@ export default function Login(props) {
       }).then(resp => resp.json())
         .then(res => {
           console.log(res.token);//store the token in cookies
-          setCookie('token', res.token)
-          console.log(cookies)
+          setCookie('token', res.token);
+          console.log(cookies);
+          // props.userLogin(res.token);// pass token to props parent
           // have to check the number of atempts
           if (res.token) {
-            console.log('token ok : ', res.token)
-            // window.location.href = "/things"
+            console.log('token ok : ', res.token);
+            window.location.href = "/things"
           }
         })
         .catch(error => console.log(error));
@@ -58,27 +59,31 @@ export default function Login(props) {
   }
 
   return (
-    <div className="field">
-      LOGIN
-      <div className="control">
+    <span className="field">
+      {isLoginView ? <h1>LOGIN</h1> : <h1>REGISTER</h1>}LOGIN
+      <span className="control">
         <label>Username
         <input type="text" className="input is-info"
             name="username" value={username} onChange={changeUsername} />
         </label>
-      </div>
-      <div className="control">
+      </span>
+      <span className="control">
         <label>password
         <input type="password" className="input is-info"
             name="password" value={password} onChange={changePassword} />
         </label>
-      </div>
+      </span>
       {/* <button onClick={login} className="button is-link">Login</button> */}
-      <div><button className="button is-link" onClick={login}
-      >{isLoginView ? 'Login' : 'Register'}</button>
-        <span onClick={toogleView}>Register</span></div>
+      <span>
+        {isLoginView ?
+          <button className="button is-link" onClick={login}>LOGIN</button> :
+          <button className="button is-link" onClick={login}>REGISTER</button>
+        }
+      </span>
+      <div onClick={toogleView}>Register</div>
       <div>
         <a href="/">forget login/password</a>
       </div>
-    </div>
+    </span>
   )
 }
