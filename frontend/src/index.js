@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
 import Login from './components/Login';
 import Thing from './components/Thing';
 import * as serviceWorker from './serviceWorker';
@@ -13,7 +13,7 @@ const routing = (
     <CookiesProvider>
       <Route exact path="/" component={Login}></Route>
       {/* <Route exact path="/" component={App}></Route> */}
-      <Route exact path="/things" component={Thing}></Route>
+      <Route exact path="/home" component={Thing}></Route>
       {/* <Route path="/things" component={App}></Route> */}
     </CookiesProvider>
   </BrowserRouter>

@@ -40,7 +40,7 @@ export default function Login(props) {
           // have to check the number of atempts
           if (res.token) {
             console.log('token ok : ', res.token);
-            window.location.href = "/things"
+            window.location.href = "/home"
           }
         })
         .catch(error => console.log(error));
